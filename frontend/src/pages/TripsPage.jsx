@@ -35,10 +35,20 @@ export default function TripsPage() {
       if (filters.maxPrice) params.maxPrice = filters.maxPrice;
       if (filters.duration) params.duration = filters.duration;
       const { data } = await axios.get('/api/trips', { params });
-      const filtered = filters.search
-        ? data.filter(t => t.title.toLowerCase().includes(filters.search.toLowerCase()) || t.route.toLowerCase().includes(filters.search.toLowerCase()))
-        : data;
-      setTrips(filtered);
+
+const tripsData = Array.isArray(data)
+  ? data
+  : data.trips || [];
+
+const filtered = filters.search
+  ? tripsData.filter(
+      t =>
+        t.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+        t.route.toLowerCase().includes(filters.search.toLowerCase())
+    )
+  : tripsData;
+
+setTrips(filtered);
     } catch (err) {
       console.error(err);
     } finally {

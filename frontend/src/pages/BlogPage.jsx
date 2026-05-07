@@ -24,7 +24,10 @@ export default function BlogPage() {
   useEffect(() => {
     const params = activeCategory !== 'All' ? { category: activeCategory } : {};
     axios.get('/api/blog', { params })
-      .then(r => { setBlogs(r.data); setLoading(false); })
+      .then(r => {
+  setBlogs(Array.isArray(r.data) ? r.data : r.data.blogs || []);
+  setLoading(false);
+})
       .catch(() => setLoading(false));
   }, [activeCategory]);
 
