@@ -34,7 +34,10 @@ export default function TripsPage() {
       if (filters.vehicleType !== 'All') params.vehicleType = filters.vehicleType;
       if (filters.maxPrice) params.maxPrice = filters.maxPrice;
       if (filters.duration) params.duration = filters.duration;
-      const { data } = await axios.get('/api/trips', { params });
+      const { data } = await axios.get(
+  `${import.meta.env.VITE_API_URL}/api/trips`,
+  { params }
+);
 
 const tripsData = Array.isArray(data)
   ? data
