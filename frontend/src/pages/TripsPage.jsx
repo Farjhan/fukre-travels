@@ -43,8 +43,8 @@ const tripsData = Array.isArray(data)
 const filtered = filters.search
   ? tripsData.filter(
       t =>
-        t.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-        t.route.toLowerCase().includes(filters.search.toLowerCase())
+        (t.name || "").toLowerCase().includes(filters.search.toLowerCase()) ||
+        (t.location || "").toLowerCase().includes(filters.search.toLowerCase())
     )
   : tripsData;
 
