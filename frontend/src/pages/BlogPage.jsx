@@ -24,11 +24,15 @@ export default function BlogPage() {
   useEffect(() => {
     const params = activeCategory !== 'All' ? { category: activeCategory } : {};
     axios.get('/api/blog', { params })
-      .then(r => {
-  setBlogs(Array.isArray(r.data) ? r.data : r.data.blogs || []);
-  setLoading(false);
-})
-      .catch(() => setLoading(false));
+  .then(r => {
+    const blogData = Array.isArray(r.data)
+      ? r.data
+      : r.data.blogs || [];
+
+    setBlogs(blogData);
+    setLoading(false);
+  })
+  .catch(() => setLoading(false));
   }, [activeCategory]);
 
   return (
@@ -69,7 +73,7 @@ export default function BlogPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {blogs.map((blog, i) => (
+              {(Array.isArray(blogs) ? blogs : []).map((blog, i) => (
                 <Link key={blog._id} to={`/blog/${blog.slug}`}
                   className="group bg-earth-800 border border-forest-900/30 rounded-2xl overflow-hidden hover:border-forest-700/50 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-forest-900/30">
                   {/* Image */}
