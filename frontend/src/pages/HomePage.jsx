@@ -182,14 +182,17 @@ export default function HomePage() {
               View all trips <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-          {loading ? <LoadingSpinner fullScreen={false} text="Loading trips..." /> : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {Array.isArray(featuredTrips) &&
-  featuredTrips.map((trip, i) => (
-    <TripCard key={trip._id} trip={trip} index={i} />
-))}
-            </div>
-          )}
+          {loading ? (
+  <LoadingSpinner fullScreen={false} text="Loading trips..." />
+) : (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    {Array.isArray(featuredTrips)
+      ? featuredTrips.map((trip, i) => (
+          <TripCard key={trip._id} trip={trip} index={i} />
+        ))
+      : null}
+  </div>
+)}
         </div>
       </section>
 
