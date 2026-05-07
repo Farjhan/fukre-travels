@@ -1,0 +1,14 @@
+{
+  "name": "fukre-travels",
+  "version": "1.0.0",
+  "description": "Fukre Travels – Northeast India Bike & Car Road Trip Platform",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm start",
+    "seed": "cd backend && npm run seed",
+    "start": "cd backend && npm start"
+  },
+  "keywords": ["northeast india", "bike trips", "travel", "arunachal", "meghalaya"],
+  "author": "Fukre Travels"
+}
