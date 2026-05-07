@@ -20,7 +20,16 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/api/bookings/my-bookings').then(r => { setBookings(r.data); setLoading(false); }).catch(() => setLoading(false));
+    axios.get('/api/bookings/my-bookings')
+  .then(r => {
+    setBookings(
+      Array.isArray(r.data)
+        ? r.data
+        : r.data.bookings || []
+    );
+    setLoading(false);
+  })
+  .catch(() => setLoading(false));
   }, []);
 
   const cancelBooking = async (id) => {

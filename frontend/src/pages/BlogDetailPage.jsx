@@ -15,11 +15,21 @@ export default function BlogDetailPage() {
     setLoading(true);
     axios.get(`/api/blog/${slug}`)
       .then(r => {
-        setBlog(r.data);
-        // Fetch related
-        return axios.get('/api/blog', { params: { category: r.data.category } });
-      })
-      .then(r => setRelated(r.data.filter(b => b.slug !== slug).slice(0, 3)))
+  setBlog(r.data?.blog || r.data);
+
+  return axios.get('/api/blog', {
+    params: { category: r.data?.category || r.data?.blog?.category }
+  });
+})
+.then(r => {
+  const blogs = Array.isArray(r.data)
+    ? r.data
+    : r.data.blogs || [];
+
+  setRelated(
+    blogs.filter(b => b.slug !== slug).slice(0, 3)
+  );
+})
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [slug]);

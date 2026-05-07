@@ -18,7 +18,12 @@ export default function TripDetailPage() {
   const [openDay, setOpenDay] = useState(0);
 
   useEffect(() => {
-    axios.get(`/api/trips/${id}`).then(r => { setTrip(r.data); setLoading(false); }).catch(() => setLoading(false));
+    axios.get(`/api/trips/${id}`)
+  .then(r => {
+    setTrip(r.data?.trip || r.data);
+    setLoading(false);
+  })
+  .catch(() => setLoading(false));
   }, [id]);
 
   if (loading) return <LoadingSpinner text="Loading trip details..." />;

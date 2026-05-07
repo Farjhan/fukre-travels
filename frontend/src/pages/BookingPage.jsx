@@ -25,7 +25,12 @@ export default function BookingPage() {
   });
 
   useEffect(() => {
-    axios.get(`/api/trips/${tripId}`).then(r => { setTrip(r.data); setLoading(false); }).catch(() => setLoading(false));
+    axios.get(`/api/trips/${tripId}`)
+  .then(r => {
+    setTrip(r.data?.trip || r.data);
+    setLoading(false);
+  })
+  .catch(() => setLoading(false));
   }, [tripId]);
 
   const totalPrice = trip ? trip.price * form.groupSize : 0;
