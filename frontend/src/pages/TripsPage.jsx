@@ -172,7 +172,9 @@ setTrips(filtered);
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {trips.map((trip, i) => <TripCard key={trip._id} trip={trip} index={i} />)}
+                {(Array.isArray(trips) ? trips : []).map((trip, i) => (
+  <TripCard key={trip._id} trip={trip} index={i} />
+))}
               </div>
             )
           )}
