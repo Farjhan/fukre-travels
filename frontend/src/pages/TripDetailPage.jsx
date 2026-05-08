@@ -18,7 +18,7 @@ export default function TripDetailPage() {
   const [openDay, setOpenDay] = useState(0);
 
   useEffect(() => {
-    axios.get(`/api/trips/${id}`)
+    axios.get(`${import.meta.env.VITE_API_URL}/api/trips/${id}`)
   .then(r => {
     setTrip(r.data?.trip || r.data);
     setLoading(false);
@@ -34,7 +34,7 @@ export default function TripDetailPage() {
   return (
     <>
       <Helmet>
-        <title>{trip.title} – Fukre Travels</title>
+        <title>{trip.name} – Fukre Travels</title>
         <meta name="description" content={trip.description?.slice(0, 160)} />
         <meta name="keywords" content={`${trip.state} road trip, ${trip.route}, Northeast India bike trip`} />
       </Helmet>
