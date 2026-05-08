@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const tripSchema = new mongoose.Schema({
-  title: { type: String, required: true },
+  name: { type: String, required: true },
   slug: { type: String, unique: true },
   state: { type: String, enum: ['Arunachal Pradesh', 'Meghalaya', 'Assam', 'Mizoram', 'Multi-State'], required: true },
-  route: { type: String, required: true },
+  location: { type: String, required: true },
   duration: { type: Number, required: true }, // days
   price: { type: Number, required: true },
   difficulty: { type: String, enum: ['Easy', 'Moderate', 'Hard', 'Expert'], required: true },
@@ -21,7 +21,7 @@ const tripSchema = new mongoose.Schema({
   images: [String],
   coverImage: String,
   maxGroupSize: { type: Number, default: 12 },
-  rating: { type: Number, default: 4.5 },
+  rating: { type: Number, default: 5 },
   reviewCount: { type: Number, default: 0 },
   featured: { type: Boolean, default: false },
   available: { type: Boolean, default: true },
@@ -31,8 +31,8 @@ const tripSchema = new mongoose.Schema({
 });
 
 tripSchema.pre('save', function(next) {
-  if (this.title && !this.slug) {
-    this.slug = this.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  if (this.name && !this.slug) {
+    this.slug = this.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   }
   next();
 });

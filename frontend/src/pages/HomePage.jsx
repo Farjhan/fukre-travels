@@ -58,7 +58,7 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    axios.get('/api/trips?featured=true').then(r => {
+     axios.get(`${import.meta.env.VITE_API_URL}/api/trips?featured=true`).then(r => {
       setFeaturedTrips(r.data.slice(0, 4));
       setLoading(false);
     }).catch(() => setLoading(false));

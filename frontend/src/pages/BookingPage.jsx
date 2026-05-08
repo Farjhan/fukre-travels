@@ -25,7 +25,7 @@ export default function BookingPage() {
   });
 
   useEffect(() => {
-    axios.get(`/api/trips/${tripId}`)
+     axios.get(`${import.meta.env.VITE_API_URL}/api/trips/${tripId}`)
   .then(r => {
     setTrip(r.data?.trip || r.data);
     setLoading(false);
@@ -40,7 +40,7 @@ export default function BookingPage() {
     if (!form.bookingDate) return toast.error('Please select a travel date');
     setSubmitting(true);
     try {
-      const { data: booking } = await axios.post('/api/bookings', {
+       const { data: booking } = await axios.post(`${import.meta.env.VITE_API_URL}/api/bookings`, {
         tripId,
         bookingDate: form.bookingDate,
         vehicleType: form.vehicleType,
@@ -64,7 +64,7 @@ export default function BookingPage() {
     toast.loading('Processing payment...', { id: 'payment' });
     await new Promise(r => setTimeout(r, 1500));
     try {
-      await axios.post(`/api/bookings/${bookingId}/pay`);
+       await axios.post(`${import.meta.env.VITE_API_URL}/api/bookings/${bookingId}/pay`);
       toast.success('Payment successful! Booking confirmed! 🎉', { id: 'payment' });
       setBookingSuccess(true);
     } catch {
@@ -81,7 +81,7 @@ export default function BookingPage() {
         <CheckCircle size={64} className="text-forest-400 mx-auto mb-6 animate-pulse" />
         <h2 className="font-display text-3xl font-bold text-white mb-3">Booking Confirmed! 🎉</h2>
         <p className="text-gray-400 mb-2">Your adventure awaits, {user?.name}!</p>
-        <p className="text-gray-400 text-sm mb-8">Trip: <strong className="text-white">{trip.title}</strong></p>
+         <p className="text-gray-400 text-sm mb-8">Trip: <strong className="text-white">{trip.name}</strong></p>
         <div className="bg-earth-800 border border-forest-800/40 rounded-xl p-4 mb-6 text-sm text-left space-y-2">
           <div className="flex justify-between"><span className="text-gray-400">Travel Date</span><span className="text-white">{new Date(form.bookingDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</span></div>
           <div className="flex justify-between"><span className="text-gray-400">Vehicle</span><span className="text-white">{form.vehicleType}</span></div>
@@ -97,13 +97,13 @@ export default function BookingPage() {
 
   return (
     <>
-      <Helmet><title>Book {trip.title} – Fukre Travels</title></Helmet>
+      <Helmet><title>Book {trip.name} – Fukre Travels</title></Helmet>
       <div className="pt-20 min-h-screen">
         <div className="max-w-4xl mx-auto px-4 py-10">
           <div className="mb-8">
             <p className="text-forest-400 text-sm font-mono uppercase tracking-widest mb-2">Booking</p>
-            <h1 className="font-display text-3xl md:text-4xl font-bold text-white">{trip.title}</h1>
-            <p className="text-gray-400 mt-1 text-sm">{trip.route}</p>
+            <h1 className="font-display text-3xl md:text-4xl font-bold text-white">{trip.name}</h1>
+            <p className="text-gray-400 mt-1 text-sm">{trip.location}</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
@@ -203,9 +203,9 @@ export default function BookingPage() {
             {/* Order Summary */}
             <div className="lg:col-span-2">
               <div className="sticky top-24 bg-earth-800 border border-forest-900/40 rounded-2xl overflow-hidden">
-                <img src={trip.coverImage} alt={trip.title} className="w-full h-40 object-cover" />
+                 <img src={trip.coverImage} alt={trip.name} className="w-full h-40 object-cover" />
                 <div className="p-5 space-y-4">
-                  <h3 className="font-display text-lg font-semibold text-white">{trip.title}</h3>
+                   <h3 className="font-display text-lg font-semibold text-white">{trip.name}</h3>
                   <div className="space-y-2 text-sm">
                     {[
                       { label: 'Duration', value: `${trip.duration} days` },

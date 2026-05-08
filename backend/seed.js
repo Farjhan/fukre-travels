@@ -8,10 +8,10 @@ const Blog = require('./models/Blog');
 
 const trips = [
   {
-    title: "Tawang Monastery Circuit",
+    name: "Tawang Monastery Circuit",
     slug: "tawang-monastery-circuit",
     state: "Arunachal Pradesh",
-    route: "Guwahati → Tezpur → Bomdila → Dirang → Tawang",
+    location: "Guwahati → Tezpur → Bomdila → Dirang → Tawang",
     duration: 8,
     price: 18500,
     difficulty: "Hard",
@@ -40,10 +40,10 @@ const trips = [
     featured: true
   },
   {
-    title: "Meghalaya Living Roots Explorer",
+    name: "Meghalaya Living Roots Explorer",
     slug: "meghalaya-living-roots-explorer",
     state: "Meghalaya",
-    route: "Guwahati → Shillong → Cherrapunji → Mawlynnong → Dawki",
+    location: "Guwahati → Shillong → Cherrapunji → Mawlynnong → Dawki",
     duration: 6,
     price: 12800,
     difficulty: "Easy",
@@ -69,10 +69,10 @@ const trips = [
     featured: true
   },
   {
-    title: "Kaziranga Bikers Trail",
+    name: "Kaziranga Bikers Trail",
     slug: "kaziranga-bikers-trail",
     state: "Assam",
-    route: "Guwahati → Kaziranga → Majuli → Jorhat → Sivsagar",
+    location: "Guwahati → Kaziranga → Majuli → Jorhat → Sivsagar",
     duration: 5,
     price: 9500,
     difficulty: "Easy",
@@ -97,10 +97,10 @@ const trips = [
     featured: true
   },
   {
-    title: "Mizoram Mizo Highland Ride",
+    name: "Mizoram Mizo Highland Ride",
     slug: "mizoram-mizo-highland-ride",
     state: "Mizoram",
-    route: "Silchar → Aizawl → Champhai → Reiek → Lunglei",
+    location: "Silchar → Aizawl → Champhai → Reiek → Lunglei",
     duration: 7,
     price: 16200,
     difficulty: "Moderate",
@@ -127,10 +127,10 @@ const trips = [
     featured: true
   },
   {
-    title: "Ziro Valley Music & Culture Trail",
+    name: "Ziro Valley Music & Culture Trail",
     slug: "ziro-valley-music-culture-trail",
     state: "Arunachal Pradesh",
-    route: "Itanagar → Ziro → Daporijo → Along",
+    location: "Itanagar → Ziro → Daporijo → Along",
     duration: 9,
     price: 21000,
     difficulty: "Moderate",
@@ -158,10 +158,10 @@ const trips = [
     featured: false
   },
   {
-    title: "Garo Hills & Balpakram Adventure",
+    name: "Garo Hills & Balpakram Adventure",
     slug: "garo-hills-balpakram-adventure",
     state: "Meghalaya",
-    route: "Guwahati → Tura → Balpakram → Nokrek → Siju",
+    location: "Guwahati → Tura → Balpakram → Nokrek → Siju",
     duration: 5,
     price: 11000,
     difficulty: "Hard",

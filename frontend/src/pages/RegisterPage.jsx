@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   const [form, setForm] = useState({
     name: '',
@@ -31,26 +33,13 @@ export default function RegisterPage() {
 
     setLoading(true);
 
-    try {
-      const { data } = await axios.post('/api/auth/register', {
-        name: form.name,
-        email: form.email,
-        password: form.password
-      });
+    const result = await register(form.name, form.email, form.password, '');
 
-      toast.success('Registration successful!');
-
-      localStorage.setItem('token', data.token);
-
+    if (result.success) {
       navigate('/dashboard');
-
-    } catch (err) {
-      toast.error(
-        err.response?.data?.message || 'Registration failed'
-      );
-    } finally {
-      setLoading(false);
     }
+
+    setLoading(false);
   };
 
   return (

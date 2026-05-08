@@ -15,7 +15,7 @@ router.post('/', protect, async (req, res) => {
       user: req.user._id, trip: tripId, bookingDate, vehicleType,
       groupSize: groupSize || 1, totalPrice, specialRequests, emergencyContact
     });
-    await booking.populate('trip', 'title coverImage duration');
+     await booking.populate('trip', 'name coverImage duration');
     res.status(201).json(booking);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -25,7 +25,7 @@ router.post('/', protect, async (req, res) => {
 // Get user's bookings
 router.get('/my-bookings', protect, async (req, res) => {
   try {
-    const bookings = await Booking.find({ user: req.user._id }).populate('trip', 'title coverImage duration route state price').sort('-createdAt');
+     const bookings = await Booking.find({ user: req.user._id }).populate('trip', 'name coverImage duration location state price').sort('-createdAt');
     res.json(bookings);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -63,7 +63,7 @@ router.post('/:id/pay', protect, async (req, res) => {
 // Admin: all bookings
 router.get('/admin/all', protect, adminOnly, async (req, res) => {
   try {
-    const bookings = await Booking.find({}).populate('user', 'name email').populate('trip', 'title state').sort('-createdAt');
+     const bookings = await Booking.find({}).populate('user', 'name email').populate('trip', 'name state').sort('-createdAt');
     res.json(bookings);
   } catch (err) {
     res.status(500).json({ message: err.message });

@@ -19,7 +19,7 @@ export default function TripCard({ trip, index = 0 }) {
       <div className="relative h-52 overflow-hidden">
         <img
           src={trip.coverImage || 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800'}
-          alt={trip.title}
+           alt={trip.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-earth-900 via-transparent to-transparent" />
@@ -44,7 +44,7 @@ export default function TripCard({ trip, index = 0 }) {
       <div className="p-5">
         <div className="flex items-start justify-between gap-2 mb-2">
           <h3 className="font-display font-semibold text-lg text-white leading-snug group-hover:text-forest-300 transition-colors">
-            {trip.title}
+             {trip.name}
           </h3>
         </div>
 
@@ -53,7 +53,7 @@ export default function TripCard({ trip, index = 0 }) {
           <span>{trip.state}</span>
           <span className="mx-1">·</span>
           <TrendingUp size={12} />
-          <span>{trip.route?.split('→')[0]?.trim()} → ...</span>
+           <span>{trip.location?.split('→')[0]?.trim()} → ...</span>
         </div>
 
         <p className="text-gray-400 text-sm leading-relaxed line-clamp-2 mb-4">{trip.description}</p>
@@ -78,7 +78,7 @@ export default function TripCard({ trip, index = 0 }) {
             <span className="text-xs text-gray-500">per person</span>
           </div>
           <Link
-            to={`/trips/${trip.slug || trip._id}`}
+            to={`/trips/${trip._id}`}
             className="flex items-center gap-1.5 bg-forest-600 hover:bg-forest-500 text-white text-sm font-medium px-4 py-2.5 rounded-xl transition-all hover:shadow-lg hover:shadow-forest-900/40 active:scale-95"
           >
             Explore <ChevronRight size={16} />

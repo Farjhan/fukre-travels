@@ -36,13 +36,13 @@ export default function TripDetailPage() {
       <Helmet>
         <title>{trip.name} – Fukre Travels</title>
         <meta name="description" content={trip.description?.slice(0, 160)} />
-        <meta name="keywords" content={`${trip.state} road trip, ${trip.route}, Northeast India bike trip`} />
+        <meta name="keywords" content={`${trip.state} road trip, ${trip.location}, Northeast India bike trip`} />
       </Helmet>
 
       <div className="pt-20 min-h-screen">
         {/* Hero Image */}
         <div className="relative h-[60vh] overflow-hidden">
-          <img src={images[activeImg] || trip.coverImage} alt={trip.title} className="w-full h-full object-cover" />
+           <img src={images[activeImg] || trip.coverImage} alt={trip.name} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-earth-900 via-earth-900/20 to-transparent" />
           <button onClick={() => navigate(-1)} className="absolute top-6 left-6 flex items-center gap-2 bg-black/40 backdrop-blur-sm border border-white/20 text-white rounded-full px-4 py-2 text-sm hover:bg-black/60 transition-all">
             <ArrowLeft size={16} /> Back
@@ -78,10 +78,10 @@ export default function TripDetailPage() {
                   </span>
                 ))}
               </div>
-              <h1 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">{trip.title}</h1>
+               <h1 className="font-display text-3xl md:text-4xl font-bold text-white mb-3">{trip.name}</h1>
               <div className="flex items-center gap-1.5 text-gray-400 text-sm mb-4">
                 <TrendingUp size={14} className="text-forest-500" />
-                <span className="font-mono">{trip.route}</span>
+                <span className="font-mono">{trip.location}</span>
               </div>
               <div className="flex flex-wrap gap-5 text-sm text-gray-400">
                 <span className="flex items-center gap-1.5"><Clock size={14} className="text-forest-500" /> {trip.duration} Days</span>
@@ -157,8 +157,8 @@ export default function TripDetailPage() {
                 ) : (
                   <div className="text-center text-gray-500">
                     <MapPin size={40} className="mx-auto mb-3 text-forest-800" />
-                    <p className="text-sm">Map: {trip.route}</p>
-                    <a href={`https://maps.google.com?q=${encodeURIComponent(trip.route)}`} target="_blank" rel="noreferrer"
+                     <p className="text-sm">Map: {trip.location}</p>
+                     <a href={`https://maps.google.com?q=${encodeURIComponent(trip.location)}`} target="_blank" rel="noreferrer"
                       className="text-xs text-forest-400 mt-2 inline-block">View on Google Maps →</a>
                   </div>
                 )}

@@ -17,12 +17,12 @@ const TABS = [
   { id: 'blogs', label: 'Blogs', icon: FileText },
 ];
 
-const EMPTY_TRIP = {
-  title: '', state: 'Arunachal Pradesh', route: '', duration: 5,
-  price: 10000, difficulty: 'Moderate', vehicleType: ['Bike'],
-  description: '', featured: false, available: true,
-  coverImage: '', highlights: '', maxGroupSize: 10
-};
+ const EMPTY_TRIP = {
+   name: '', state: 'Arunachal Pradesh', location: '', duration: 5,
+   price: 10000, difficulty: 'Moderate', vehicleType: ['Bike'],
+   description: '', featured: false, available: true, rating: 5,
+   coverImage: '', highlights: '', maxGroupSize: 10
+ };
 
 export default function AdminPage() {
   const [tab, setTab] = useState('overview');
@@ -43,19 +43,19 @@ export default function AdminPage() {
     setLoading(true);
     try {
       if (tab === 'overview') {
-        const { data } = await axios.get('/api/admin/stats');
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/stats`);
         setStats(data);
       } else if (tab === 'trips') {
-        const { data } = await axios.get('/api/trips');
+         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/trips`);
         setTrips(data);
       } else if (tab === 'bookings') {
-        const { data } = await axios.get('/api/bookings/admin/all');
+         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/bookings/admin/all`);
         setBookings(data);
       } else if (tab === 'users') {
-        const { data } = await axios.get('/api/admin/users');
+         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users`);
         setUsers(data);
       } else if (tab === 'blogs') {
-        const { data } = await axios.get('/api/blog');
+         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/blog`);
         setBlogs(data);
       }
     } catch (err) {
@@ -68,7 +68,22 @@ export default function AdminPage() {
   const openTripForm = (trip = null) => {
     if (trip) {
       setEditTrip(trip._id);
-      setTripForm({ ...trip, highlights: trip.highlights?.join('\n') || '', vehicleType: trip.vehicleType || ['Bike'] });
+      setTripForm({
+        name: trip.name || '',
+        location: trip.location || '',
+        state: trip.state,
+        duration: trip.duration,
+        price: trip.price,
+        difficulty: trip.difficulty,
+        vehicleType: trip.vehicleType || ['Bike'],
+        description: trip.description || '',
+        featured: trip.featured || false,
+        available: trip.available !== false,
+        rating: trip.rating || 5,
+        coverImage: trip.coverImage || '',
+        highlights: trip.highlights?.join('\n') || '',
+        maxGroupSize: trip.maxGroupSize || 10
+      });
     } else {
       setEditTrip(null);
       setTripForm(EMPTY_TRIP);
@@ -87,10 +102,10 @@ export default function AdminPage() {
         maxGroupSize: Number(tripForm.maxGroupSize),
       };
       if (editTrip) {
-        await axios.put(`/api/trips/${editTrip}`, payload);
+         await axios.put(`${import.meta.env.VITE_API_URL}/api/trips/${editTrip}`, payload);
         toast.success('Trip updated!');
       } else {
-        await axios.post('/api/trips', payload);
+         await axios.post(`${import.meta.env.VITE_API_URL}/api/trips`, payload);
         toast.success('Trip created!');
       }
       setShowTripForm(false);
@@ -105,7 +120,7 @@ export default function AdminPage() {
   const deleteTrip = async (id) => {
     if (!window.confirm('Delete this trip? This cannot be undone.')) return;
     try {
-      await axios.delete(`/api/trips/${id}`);
+       await axios.delete(`${import.meta.env.VITE_API_URL}/api/trips/${id}`);
       setTrips(prev => prev.filter(t => t._id !== id));
       toast.success('Trip deleted');
     } catch {
@@ -115,7 +130,7 @@ export default function AdminPage() {
 
   const updateBookingStatus = async (id, status) => {
     try {
-      await axios.put(`/api/admin/bookings/${id}`, { status });
+       await axios.put(`${import.meta.env.VITE_API_URL}/api/admin/bookings/${id}`, { status });
       setBookings(prev => prev.map(b => b._id === id ? { ...b, status } : b));
       toast.success('Status updated');
     } catch {
@@ -187,7 +202,7 @@ export default function AdminPage() {
                             <div>
                               <span className="text-white font-medium">{b.user?.name}</span>
                               <span className="text-gray-500 mx-2">·</span>
-                              <span className="text-gray-400">{b.trip?.title}</span>
+                               <span className="text-gray-400">{b.trip?.name}</span>
                             </div>
                             <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusColors[b.status]}`}>
                               {b.status}
@@ -221,8 +236,8 @@ export default function AdminPage() {
                         </div>
                         <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {[
-                            { label: 'Title', key: 'title', span: 2 },
-                            { label: 'Route', key: 'route', span: 2 },
+                            { label: 'Name', key: 'name', span: 2 },
+                            { label: 'Location', key: 'location', span: 2 },
                             { label: 'Cover Image URL', key: 'coverImage', span: 2 },
                           ].map(({ label, key, span }) => (
                             <div key={key} className={span === 2 ? 'col-span-2' : ''}>
@@ -310,17 +325,17 @@ export default function AdminPage() {
                     {trips.map(trip => (
                       <div key={trip._id} className="bg-earth-800 border border-forest-900/30 rounded-xl p-4 flex items-center gap-4 hover:border-forest-700/40 transition-all">
                         <div className="w-16 h-12 rounded-lg overflow-hidden shrink-0">
-                          <img src={trip.coverImage} alt={trip.title} className="w-full h-full object-cover" />
+                           <img src={trip.coverImage} alt={trip.name} className="w-full h-full object-cover" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <h4 className="text-sm font-semibold text-white truncate">{trip.title}</h4>
+                             <h4 className="text-sm font-semibold text-white truncate">{trip.name}</h4>
                             {trip.featured && <span className="text-xs bg-forest-900 text-forest-400 px-2 py-0.5 rounded-full shrink-0">Featured</span>}
                           </div>
                           <p className="text-xs text-gray-400">{trip.state} · {trip.duration} days · ₹{trip.price?.toLocaleString('en-IN')}</p>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
-                          <a href={`/trips/${trip.slug || trip._id}`} target="_blank" rel="noreferrer"
+                          <a href={`/trips/${trip._id}`} target="_blank" rel="noreferrer"
                             className="p-2 rounded-lg bg-earth-900 hover:bg-earth-700 text-gray-400 hover:text-white transition-colors">
                             <Eye size={14} />
                           </a>
@@ -362,7 +377,7 @@ export default function AdminPage() {
                               <div className="text-xs text-gray-500">{b.user?.email}</div>
                             </td>
                             <td className="py-3 pr-4">
-                              <div className="text-gray-300 max-w-[150px] truncate">{b.trip?.title}</div>
+                               <div className="text-gray-300 max-w-[150px] truncate">{b.trip?.name}</div>
                               <div className="text-xs text-gray-500">{b.trip?.state}</div>
                             </td>
                             <td className="py-3 pr-4 text-gray-400 whitespace-nowrap">{new Date(b.bookingDate).toLocaleDateString('en-IN')}</td>

@@ -19,7 +19,7 @@ router.get('/stats', protect, adminOnly, async (req, res) => {
       { $match: { paymentStatus: 'paid' } },
       { $group: { _id: null, total: { $sum: '$totalPrice' } } }
     ]);
-    const recentBookings = await Booking.find({}).populate('user', 'name').populate('trip', 'title').sort('-createdAt').limit(5);
+    const recentBookings = await Booking.find({}).populate('user', 'name').populate('trip', 'name state').sort('-createdAt').limit(5);
     res.json({ users, trips, bookings, blogs, revenue: revenue[0]?.total || 0, recentBookings });
   } catch (err) {
     res.status(500).json({ message: err.message });

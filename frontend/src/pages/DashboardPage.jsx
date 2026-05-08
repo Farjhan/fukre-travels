@@ -20,7 +20,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/api/bookings/my-bookings')
+     axios.get(`${import.meta.env.VITE_API_URL}/api/bookings/my-bookings`)
   .then(r => {
     setBookings(
       Array.isArray(r.data)
@@ -35,7 +35,7 @@ export default function DashboardPage() {
   const cancelBooking = async (id) => {
     if (!window.confirm('Cancel this booking?')) return;
     try {
-      await axios.put(`/api/bookings/${id}/cancel`);
+       await axios.put(`${import.meta.env.VITE_API_URL}/api/bookings/${id}/cancel`);
       setBookings(prev => prev.map(b => b._id === id ? { ...b, status: 'cancelled' } : b));
       toast.success('Booking cancelled');
     } catch {
@@ -102,12 +102,12 @@ export default function DashboardPage() {
                       <div className="flex flex-col sm:flex-row gap-4 p-5">
                         {booking.trip?.coverImage && (
                           <div className="shrink-0 w-full sm:w-24 h-32 sm:h-20 rounded-xl overflow-hidden">
-                            <img src={booking.trip.coverImage} alt={booking.trip.title} className="w-full h-full object-cover" />
+                             <img src={booking.trip.coverImage} alt={booking.trip.name} className="w-full h-full object-cover" />
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
                           <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
-                            <h3 className="font-display font-semibold text-white text-lg">{booking.trip?.title || 'Unknown Trip'}</h3>
+                            <h3 className="font-display font-semibold text-white text-lg">{booking.trip?.name || 'Unknown Trip'}</h3>
                             <span className={`text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1.5 ${status.color}`}>
                               <StatusIcon size={11} /> {status.label}
                             </span>
