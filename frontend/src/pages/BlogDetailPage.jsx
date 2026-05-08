@@ -13,11 +13,11 @@ export default function BlogDetailPage() {
 
   useEffect(() => {
     setLoading(true);
-     axios.get(`${import.meta.env.VITE_API_URL}/api/blog/${slug}`)
+     axios.get(`${import.meta.env.VITE_API_URL}/api/blogs/${slug}`)
       .then(r => {
   setBlog(r.data?.blog || r.data);
 
-   return axios.get(`${import.meta.env.VITE_API_URL}/api/blog`, {
+   return axios.get(`${import.meta.env.VITE_API_URL}/api/blogs`, {
     params: { category: r.data?.category || r.data?.blog?.category }
   });
 })

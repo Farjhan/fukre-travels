@@ -23,7 +23,7 @@ export default function BlogPage() {
 
   useEffect(() => {
     const params = activeCategory !== 'All' ? { category: activeCategory } : {};
-     axios.get(`${import.meta.env.VITE_API_URL}/api/blog`, { params })
+     axios.get(`${import.meta.env.VITE_API_URL}/api/blogs`, { params })
   .then(r => {
     const blogData = Array.isArray(r.data)
       ? r.data

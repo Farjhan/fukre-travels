@@ -1,12 +1,35 @@
 const express = require('express');
 const router = express.Router();
 const Blog = require('../models/Blog');
+const User = require('../models/User');
 const { protect, adminOnly } = require('../middleware/auth');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
+
+// Helper to check if request is from admin
+const isAdminReq = async (req) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return false;
+  const token = authHeader.split(' ')[1];
+  if (!token) return false;
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fukre_secret');
+    const user = await User.findById(decoded.id);
+    return user && user.role === 'admin';
+  } catch (err) {
+    return false;
+  }
+};
 
 router.get('/', async (req, res) => {
   try {
     const { category, tag } = req.query;
-    const filter = { published: true };
+    const isAdmin = await isAdminReq(req);
+    const filter = {};
+    if (!isAdmin) {
+      filter.published = true;
+    }
     if (category) filter.category = category;
     if (tag) filter.tags = tag;
     const blogs = await Blog.find(filter).populate('author', 'name').sort('-createdAt');

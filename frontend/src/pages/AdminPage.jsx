@@ -36,6 +36,14 @@ export default function AdminPage() {
   const [editTrip, setEditTrip] = useState(null);
   const [tripForm, setTripForm] = useState(EMPTY_TRIP);
   const [saving, setSaving] = useState(false);
+  // Blog management state
+  const [showBlogForm, setShowBlogForm] = useState(false);
+  const [editBlog, setEditBlog] = useState(null);
+  const [blogForm, setBlogForm] = useState({
+    title: '', slug: '', excerpt: '', content: '', coverImage: '',
+    category: 'Travel Tips', tags: '', published: false
+  });
+  const [blogSaving, setBlogSaving] = useState(false);
 
   useEffect(() => { fetchData(); }, [tab]);
 
@@ -55,7 +63,7 @@ export default function AdminPage() {
          const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/admin/users`);
         setUsers(data);
       } else if (tab === 'blogs') {
-         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/blog`);
+         const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/blogs`);
         setBlogs(data);
       }
     } catch (err) {
@@ -138,7 +146,69 @@ export default function AdminPage() {
     }
   };
 
-  const statusColors = {
+   // Blog management
+   const openBlogForm = (blog = null) => {
+     if (blog) {
+       setEditBlog(blog._id);
+       setBlogForm({
+         title: blog.title || '',
+         slug: blog.slug || '',
+         excerpt: blog.excerpt || '',
+         content: blog.content || '',
+         coverImage: blog.coverImage || '',
+         category: blog.category || 'Travel Tips',
+         tags: blog.tags?.join(', ') || '',
+         published: blog.published || false
+       });
+     } else {
+       setEditBlog(null);
+       setBlogForm({
+         title: '', slug: '', excerpt: '', content: '', coverImage: '',
+         category: 'Travel Tips', tags: '', published: false
+       });
+     }
+     setShowBlogForm(true);
+   };
+
+   const saveBlog = async () => {
+     if (!blogForm.title || !blogForm.content) {
+       toast.error('Title and content are required');
+       return;
+     }
+     setBlogSaving(true);
+     try {
+       const payload = {
+         ...blogForm,
+         tags: blogForm.tags.split(',').map(t => t.trim()).filter(Boolean)
+       };
+       if (editBlog) {
+         await axios.put(`${import.meta.env.VITE_API_URL}/api/blogs/${editBlog}`, payload);
+         toast.success('Blog updated!');
+       } else {
+         await axios.post(`${import.meta.env.VITE_API_URL}/api/blogs`, payload);
+         toast.success('Blog created!');
+       }
+       setShowBlogForm(false);
+       fetchData();
+     } catch (err) {
+       toast.error(err.response?.data?.message || 'Save failed');
+     } finally {
+       setBlogSaving(false);
+     }
+   };
+
+   const deleteBlog = async (id) => {
+     if (!window.confirm('Delete this blog? This cannot be undone.')) return;
+     try {
+       await axios.delete(`${import.meta.env.VITE_API_URL}/api/blogs/${id}`);
+       setBlogs(prev => prev.filter(b => b._id !== id));
+       toast.success('Blog deleted');
+     } catch {
+       toast.error('Delete failed');
+     }
+   };
+
+   const statusColors = {
     pending: 'text-yellow-400 bg-yellow-400/10',
     confirmed: 'text-green-400 bg-green-400/10',
     cancelled: 'text-red-400 bg-red-400/10',
@@ -428,7 +498,12 @@ export default function AdminPage() {
               {/* ── BLOGS ──────────────────────────────────── */}
               {tab === 'blogs' && (
                 <div>
-                  <h2 className="font-display text-xl text-white mb-5">Blog Posts ({blogs.length})</h2>
+                   <div className="flex justify-between items-center mb-5">
+                     <h2 className="font-display text-xl text-white">Blog Posts ({blogs.length})</h2>
+                     <button onClick={() => openBlogForm()} className="flex items-center gap-2 bg-forest-600 hover:bg-forest-500 text-white text-sm px-4 py-2.5 rounded-xl transition-all">
+                       <Plus size={16} /> Add Blog
+                     </button>
+                   </div>
                   <div className="space-y-3">
                     {blogs.map(blog => (
                       <div key={blog._id} className="bg-earth-800 border border-forest-900/30 rounded-xl p-4 flex items-center justify-between gap-4">
