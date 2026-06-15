@@ -18,7 +18,7 @@ export default function TripDetailPage() {
   const [openDay, setOpenDay] = useState(0);
 
   useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/api/trips/${id}`)
+    axios.get(`${process.env.REACT_APP_API_URL}/api/trips/${id}`)
   .then(r => {
     setTrip(r.data?.trip || r.data);
     setLoading(false);
